@@ -59,43 +59,36 @@
     -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 20%, transparent 75%);
   }
 
-  /* ============ 悬浮导航 ============ */
+  /* ============ 顶部导航（非固定） ============ */
   .nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    height: var(--nav-h);
+    position: relative;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0 clamp(1.25rem, 5vw, 3.5rem);
-    background: rgba(5, 6, 10, 0.42);
-    -webkit-backdrop-filter: blur(22px) saturate(160%);
-    backdrop-filter: blur(22px) saturate(160%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-    transition: background 0.4s var(--ease), border-color 0.4s var(--ease);
+    gap: 1rem;
+    padding: 1.1rem clamp(1.25rem, 5vw, 3.5rem);
   }
-  .nav.scrolled {
-    background: rgba(5, 6, 10, 0.72);
-    border-bottom-color: rgba(255, 255, 255, 0.12);
+  .nav-pill {
+    display: flex; align-items: center;
+    gap: 0.3rem;
+    padding: 0.32rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09);
   }
-  .nav-brand {
-    display: flex; align-items: center; gap: 0.6rem;
+  .nav-pill--brand {
+    padding: 0.5rem 1.3rem;
     font-weight: 600; letter-spacing: -0.01em; font-size: 0.98rem;
   }
-  .nav-links { display: flex; align-items: center; gap: 0.35rem; }
   .nav-link {
-    position: relative;
-    padding: 0.45rem 1rem;
+    padding: 0.45rem 1.15rem;
     border-radius: 999px;
     font-size: 0.92rem; color: var(--text-dim);
-    transition: color 0.25s var(--ease), background 0.25s var(--ease);
+    transition: color 0.25s var(--ease), background 0.25s var(--ease), box-shadow 0.25s var(--ease);
   }
-  .nav-link:hover { color: var(--text); background: rgba(255, 255, 255, 0.07); }
-  .nav-link.active { color: #fff; background: rgba(255, 255, 255, 0.10); }
-  .nav-link .badge {
-    display: inline-block; margin-left: 0.4rem;
-    font-size: 0.62rem; letter-spacing: 0.08em;
-    padding: 0.1rem 0.45rem; border-radius: 999px;
-    color: var(--text-faint);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    vertical-align: 1px;
+  .nav-link:hover { color: var(--text); background: rgba(255, 255, 255, 0.08); }
+  .nav-link.active {
+    color: #fff;
+    background: linear-gradient(135deg, rgba(122, 162, 255, 0.35), rgba(167, 139, 250, 0.35));
+    box-shadow: 0 0 0 1px rgba(122, 162, 255, 0.4), 0 4px 18px rgba(122, 162, 255, 0.25);
   }
 
   /* ============ Hero ============ */
@@ -104,7 +97,7 @@
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     text-align: center;
-    padding: calc(var(--nav-h) + 2rem) 1.5rem 4rem;
+    padding: 2rem 1.5rem 4rem;
     position: relative;
   }
   .hero-kicker {
@@ -261,6 +254,8 @@
   /* ============ 响应式 ============ */
   @media (max-width: 640px) {
     :root { font-size: 16px; }
+    .nav { flex-direction: column; align-items: stretch; gap: 0.6rem; }
+    .nav-pill { justify-content: center; }
     .nav-link { padding: 0.4rem 0.75rem; }
     .hero-scroll { display: none; }
   }
@@ -271,12 +266,10 @@
 <div class="bg-glow" aria-hidden="true"></div>
 <div class="bg-grid" aria-hidden="true"></div>
 
-<!-- 悬浮导航 -->
+<!-- 顶部导航 -->
 <nav class="nav" id="nav">
-  <a class="nav-brand" href="#top">
-    <span>AI Museum</span>
-  </a>
-  <div class="nav-links">
+  <a class="nav-pill nav-pill--brand" href="#top">AI Museum</a>
+  <div class="nav-pill">
     <a class="nav-link active" href="#top">主页</a>
     <a class="nav-link" href="time-machine.html">时光机</a>
   </div>
@@ -432,14 +425,6 @@
 
 <script>
 (function () {
-  /* 导航滚动状态 */
-  var nav = document.getElementById('nav');
-  var onScroll = function () {
-    nav.classList.toggle('scrolled', window.scrollY > 24);
-  };
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
-
   /* 导航高亮 */
   var sections = ['intro', 'research', 'applications', 'future'];
   var links = document.querySelectorAll('.nav-link');
