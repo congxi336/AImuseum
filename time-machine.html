@@ -203,19 +203,19 @@
     white-space: nowrap;
   }
 
-  /* 浮现卡片 */
+  /* 浮现卡片：半透明 + backdrop-filter 高斯模糊（模糊卡片背后的内容） */
   .tl-pop {
     position: absolute; z-index: 20;
     left: 0; right: 0; top: 100%;
     margin-top: 0.9rem;
     padding: 1.3rem 1.4rem;
     border-radius: 18px;
-    background: rgba(16, 20, 32, 0.5);
+    background: rgba(22, 26, 42, 0.62);
     background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0) 55%);
-    -webkit-backdrop-filter: blur(44px) saturate(200%);
-    backdrop-filter: blur(44px) saturate(200%);
-    border: 1px solid rgba(255, 255, 255, 0.24);
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    backdrop-filter: blur(18px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.14);
     opacity: 0; visibility: hidden;
     transform: translateY(-8px) scale(0.98);
     transform-origin: top left;
@@ -226,9 +226,9 @@
     content: ""; position: absolute;
     top: -7px; left: calc(var(--tl-line) - var(--tl-pad) - 7px);
     width: 14px; height: 14px;
-    background: rgba(16, 20, 32, 0.65);
-    border-left: 1px solid rgba(255, 255, 255, 0.24);
-    border-top: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(22, 26, 42, 0.9);
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
     transform: rotate(45deg);
   }
   .tl-pop .pop-year {
@@ -248,13 +248,13 @@
     transition: opacity 0.35s var(--ease), transform 0.45s var(--spring), visibility 0s;
     pointer-events: auto;
   }
-  /* 焦点淡化：打开某项卡片时，同一 timeline 内的后续兄弟项降透明度 */
-  .tl-item.open ~ .tl-item { opacity: 0.18; }
-  .tl-item.open ~ .tl-item .tl-dot { box-shadow: 0 0 0 4px rgba(122, 162, 255, 0.06); }
-  /* 同时淡化不在 timeline 内的内容（如引文、后续 era），避免透出 */
-  main:has(.tl-item.open) .era-quote { opacity: 0.15; transition: opacity 0.3s var(--ease); }
+  /* 焦点淡化：打开卡片时，后续兄弟项保持高可见度（以便透过卡片看到模糊效果） */
+  .tl-item.open ~ .tl-item { opacity: 0.9; transition: opacity 0.3s var(--ease); }
+  .tl-item.open ~ .tl-item .tl-dot { box-shadow: 0 0 0 4px rgba(122, 162, 255, 0.10); }
+  /* 同时淡化不在 timeline 内的内容（轻微） */
+  main:has(.tl-item.open) .era-quote { opacity: 0.75; transition: opacity 0.3s var(--ease); }
   /* 鼠标悬停（桌面端）效果同上 */
-  .tl-item:hover ~ .tl-item { opacity: 0.18; }
+  .tl-item:hover ~ .tl-item { opacity: 0.9; transition: opacity 0.3s var(--ease); }
 
   /* 时代总结引文 */
   .era-quote {
