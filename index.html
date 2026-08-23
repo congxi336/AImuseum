@@ -40,13 +40,24 @@
   ::selection { background: rgba(122, 162, 255, 0.35); color: #fff; }
   a { color: inherit; text-decoration: none; }
 
+  /* ============ 水彩背景（液态玻璃的衬底） ============ */
+  .bg {
+    position: fixed; inset: 0; z-index: -3; pointer-events: none;
+  }
+  .bg img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: 0.5;
+  }
+  .bg img:nth-child(2) { opacity: 0.38; mix-blend-mode: screen; }
+
   /* ============ 背景光晕 ============ */
   .bg-glow {
     position: fixed; inset: 0; z-index: -2;
     background:
-      radial-gradient(52rem 30rem at 85% -8%, rgba(122, 162, 255, 0.13), transparent 60%),
-      radial-gradient(46rem 28rem at 8% 18%, rgba(167, 139, 250, 0.10), transparent 60%),
-      radial-gradient(40rem 26rem at 55% 110%, rgba(244, 114, 182, 0.08), transparent 62%);
+      radial-gradient(52rem 30rem at 85% -8%, rgba(122, 162, 255, 0.30), transparent 60%),
+      radial-gradient(46rem 28rem at 8% 18%, rgba(167, 139, 250, 0.24), transparent 60%),
+      radial-gradient(40rem 26rem at 55% 110%, rgba(244, 114, 182, 0.18), transparent 62%),
+      linear-gradient(180deg, rgba(5, 6, 10, 0.5), rgba(5, 6, 10, 0.82));
     pointer-events: none;
   }
   .bg-grid {
@@ -59,7 +70,7 @@
     -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 20%, transparent 75%);
   }
 
-  /* ============ 顶部导航（非固定） ============ */
+  /* ============ 顶部导航（非固定，液态玻璃） ============ */
   .nav {
     position: relative;
     display: flex; align-items: center; justify-content: space-between;
@@ -71,8 +82,11 @@
     gap: 0.3rem;
     padding: 0.32rem;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid transparent;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.55), 0 12px 28px rgba(0, 0, 0, 0.18);
+    -webkit-backdrop-filter: url(#frosted);
+    backdrop-filter: url(#frosted);
   }
   .nav-pill--brand {
     padding: 0.5rem 1.3rem;
@@ -81,14 +95,14 @@
   .nav-link {
     padding: 0.45rem 1.15rem;
     border-radius: 999px;
-    font-size: 0.92rem; color: var(--text-dim);
+    font-size: 0.92rem; color: rgba(255, 255, 255, 0.92);
     transition: color 0.25s var(--ease), background 0.25s var(--ease), box-shadow 0.25s var(--ease);
   }
-  .nav-link:hover { color: var(--text); background: rgba(255, 255, 255, 0.08); }
+  .nav-link:hover { color: #fff; background: rgba(255, 255, 255, 0.14); }
   .nav-link.active {
-    color: #fff;
-    background: linear-gradient(135deg, rgba(122, 162, 255, 0.35), rgba(167, 139, 250, 0.35));
-    box-shadow: 0 0 0 1px rgba(122, 162, 255, 0.4), 0 4px 18px rgba(122, 162, 255, 0.25);
+    color: #1a1d2e;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(210, 220, 255, 0.9));
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6), 0 6px 20px rgba(255, 255, 255, 0.35);
   }
 
   /* ============ Hero ============ */
@@ -263,13 +277,29 @@
 </head>
 <body>
 
+<div class="bg" aria-hidden="true">
+  <img src="images/Vibrant-Summer-Meadow-Watercolor.jpg" alt="">
+  <img src="images/Vibrant-Summer-Meadow-Watercolor-1.jpg" alt="">
+</div>
 <div class="bg-glow" aria-hidden="true"></div>
 <div class="bg-grid" aria-hidden="true"></div>
 
+<!-- 液态玻璃 SVG 滤镜模板（Liquid Glass: feImage 噪声位移图 + feGaussianBlur + feDisplacementMap） -->
+<svg id="glass-defs" style="position:absolute;width:0;height:0" aria-hidden="true">
+  <filter id="frosted" primitiveUnits="objectBoundingBox">
+    <feImage href="images/noise.png" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="map"/>
+    <feGaussianBlur in="SourceGraphic" stdDeviation="0.02" result="blur"/>
+    <feDisplacementMap id="disp" in="blur" in2="map" scale="1" xChannelSelector="R" yChannelSelector="G">
+      <animate id="dispIn" attributeName="scale" to="1.4" dur="0.3s" fill="freeze"/>
+      <animate id="dispOut" attributeName="scale" to="1" dur="0.3s" fill="freeze"/>
+    </feDisplacementMap>
+  </filter>
+</svg>
+
 <!-- 顶部导航 -->
 <nav class="nav" id="nav">
-  <a class="nav-pill nav-pill--brand" href="#top">AI Museum</a>
-  <div class="nav-pill">
+  <a class="nav-pill nav-pill--brand" href="#top" id="btn">AI Museum</a>
+  <div class="nav-pill" id="btn2">
     <a class="nav-link active" href="#top">主页</a>
     <a class="nav-link" href="time-machine.html">时光机</a>
   </div>
@@ -453,6 +483,31 @@
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
   document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+  /* 液态玻璃：为每个玻璃元素克隆独立 SVG 滤镜，并绑定悬停位移动画 */
+  (function () {
+    var defs = document.getElementById('glass-defs');
+    if (!defs) return;
+    var tmpl = defs.querySelector('filter');
+    var els = document.querySelectorAll('.nav-pill');
+    var n = 0;
+    els.forEach(function (el) {
+      n++;
+      var f = tmpl.cloneNode(true);
+      var fid = 'frosted-' + n;
+      f.id = fid;
+      var anims = f.querySelectorAll('animate');
+      anims[0].id = 'in-' + n;
+      anims[1].id = 'out-' + n;
+      var disp = f.querySelector('feDisplacementMap');
+      if (disp) disp.id = 'disp-' + n;
+      defs.appendChild(f);
+      el.style.webkitBackdropFilter = 'url(#' + fid + ')';
+      el.style.backdropFilter = 'url(#' + fid + ')';
+      el.addEventListener('mouseenter', function () { anims[0].beginElement(); });
+      el.addEventListener('mouseleave', function () { anims[1].beginElement(); });
+    });
+  })();
 })();
 </script>
 
