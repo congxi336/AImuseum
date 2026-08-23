@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artificial Intelligence · 1956—2026</title>
+<meta name="description" content="人工智能博物馆 —— 从 1956 达特茅斯会议到 2026 智能体时代，七十年的思想与代码之旅。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2305060a'/%3E%3Ctext x='50' y='54' text-anchor='middle' dominant-baseline='middle' font-family='Arial, sans-serif' font-size='42' font-weight='700' fill='%23f2f4f8'%3EAI%3C/text%3E%3C/svg%3E">
+<style>
+  /* ============ 基础 ============ */
+  :root {
+    --bg: #05060a;
+    --bg-soft: #0a0c14;
+    --card: rgba(255, 255, 255, 0.04);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text: #f2f4f8;
+    --text-dim: #a0a6b5;
+    --text-faint: #6b7180;
+    --accent: #7aa2ff;
+    --accent-2: #a78bfa;
+    --accent-3: #f472b6;
+    --nav-h: 56px;
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+    --spring: cubic-bezier(0.34, 1.2, 0.4, 1);
+    --serif: "Songti SC", "SimSun", "STSong", "Noto Serif SC", "Source Han Serif SC", serif;
+    font-size: 17px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+                 "HarmonyOS Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection { background: rgba(122, 162, 255, 0.35); color: #fff; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ============ 背景光晕 ============ */
+  .bg-glow {
+    position: fixed; inset: 0; z-index: -2;
+    background:
+      radial-gradient(52rem 30rem at 85% -8%, rgba(122, 162, 255, 0.13), transparent 60%),
+      radial-gradient(46rem 28rem at 8% 18%, rgba(167, 139, 250, 0.10), transparent 60%),
+      radial-gradient(40rem 26rem at 55% 110%, rgba(244, 114, 182, 0.08), transparent 62%);
+    pointer-events: none;
+  }
+  .bg-grid {
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 20%, transparent 75%);
+  }
+
+  /* ============ 悬浮导航 ============ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: var(--nav-h);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 clamp(1.25rem, 5vw, 3.5rem);
+    background: rgba(5, 6, 10, 0.42);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    backdrop-filter: blur(22px) saturate(160%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    transition: background 0.4s var(--ease), border-color 0.4s var(--ease);
+  }
+  .nav.scrolled {
+    background: rgba(5, 6, 10, 0.72);
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-weight: 600; letter-spacing: -0.01em; font-size: 0.98rem;
+  }
+  .nav-links { display: flex; align-items: center; gap: 0.35rem; }
+  .nav-link {
+    position: relative;
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    font-size: 0.92rem; color: var(--text-dim);
+    transition: color 0.25s var(--ease), background 0.25s var(--ease);
+  }
+  .nav-link:hover { color: var(--text); background: rgba(255, 255, 255, 0.07); }
+  .nav-link.active { color: #fff; background: rgba(255, 255, 255, 0.10); }
+  .nav-link .badge {
+    display: inline-block; margin-left: 0.4rem;
+    font-size: 0.62rem; letter-spacing: 0.08em;
+    padding: 0.1rem 0.45rem; border-radius: 999px;
+    color: var(--text-faint);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    vertical-align: 1px;
+  }
+
+  /* ============ Hero ============ */
+  .hero {
+    min-height: 100vh; min-height: 100svh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: calc(var(--nav-h) + 2rem) 1.5rem 4rem;
+    position: relative;
+  }
+  .hero-kicker {
+    font-size: 0.78rem; letter-spacing: 0.42em; text-indent: 0.42em;
+    color: var(--text-faint); text-transform: uppercase;
+    margin-bottom: 1.6rem;
+    animation: fadeUp 1.1s var(--ease) 0.15s both;
+  }
+  .hero-title {
+    font-size: clamp(2.6rem, 9.5vw, 7.4rem);
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 1.02;
+    background: linear-gradient(115deg, #ffffff 30%, #bcd0ff 55%, #d3b8ff 80%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    animation: fadeUp 1.1s var(--ease) 0.3s both;
+    padding-bottom: 0.1em;
+  }
+  .hero-years {
+    margin-top: 1.4rem;
+    font-size: clamp(0.95rem, 2.2vw, 1.25rem);
+    font-weight: 500;
+    letter-spacing: 0.5em; text-indent: 0.5em;
+    color: var(--text-dim);
+    animation: fadeUp 1.1s var(--ease) 0.48s both;
+  }
+  .hero-years em {
+    font-style: normal;
+    background: linear-gradient(90deg, var(--accent), var(--accent-3));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+  }
+  .hero-scroll {
+    position: absolute; bottom: 2.4rem; left: 50%;
+    display: flex; flex-direction: column; align-items: center; gap: 0.55rem;
+    color: var(--text-faint); font-size: 0.72rem; letter-spacing: 0.28em; text-indent: 0.28em;
+    animation: fadeUpScroll 1.1s var(--ease) 0.9s both;
+  }
+  .hero-scroll .line {
+    width: 1px; height: 46px;
+    background: linear-gradient(to bottom, transparent, var(--text-faint), transparent);
+    animation: scrollPulse 2.4s var(--ease) infinite;
+    transform-origin: top center;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(26px); filter: blur(6px); }
+    to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+  /* 独立关键帧：保留 translateX(-50%) 水平居中，避免被动画覆盖 */
+  @keyframes fadeUpScroll {
+    from { opacity: 0; transform: translate(-50%, 26px); filter: blur(6px); }
+    to   { opacity: 1; transform: translate(-50%, 0); filter: blur(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(0.6); opacity: 0.35; }
+    50% { transform: scaleY(1); opacity: 0.9; }
+  }
+
+  /* ============ 内容区 ============ */
+  main { position: relative; z-index: 1; }
+  section { max-width: 1080px; margin: 0 auto; padding: clamp(5rem, 10vw, 8.5rem) clamp(1.5rem, 6vw, 3rem); }
+
+  .sec-head { margin-bottom: clamp(2.5rem, 6vw, 4rem); }
+  .sec-label {
+    font-size: 0.76rem; letter-spacing: 0.4em; text-indent: 0.4em;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 0.9rem;
+  }
+  .sec-title {
+    font-size: clamp(1.9rem, 4.6vw, 3.1rem);
+    font-weight: 700; letter-spacing: -0.028em; line-height: 1.14;
+  }
+  .sec-sub {
+    margin-top: 1rem; max-width: 34em;
+    font-family: var(--serif);
+    color: var(--text-dim); font-size: 1.22rem; line-height: 1.6;
+  }
+
+  /* 引言 */
+  .intro-body p {
+    font-family: var(--serif);
+    font-size: clamp(1.12rem, 2vw, 1.35rem);
+    color: #d5dae4;
+    margin-bottom: 1.4em;
+    line-height: 1.75;
+  }
+  .intro-body p b, .intro-body strong { color: #fff; font-weight: 600; }
+
+  /* 章节末尾的分隔引文 */
+  .quote {
+    max-width: 1080px; margin: 0 auto;
+    padding: clamp(3rem, 7vw, 5.5rem) clamp(1.5rem, 6vw, 3rem);
+  }
+  .quote p {
+    font-family: var(--serif);
+    font-size: clamp(1.3rem, 3vw, 1.85rem);
+    font-weight: 500; letter-spacing: -0.02em; line-height: 1.5;
+    color: #e8ecf5; text-align: center;
+  }
+  .quote p span {
+    background: linear-gradient(90deg, var(--accent), var(--accent-3));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+  }
+  .quote .who {
+    margin-top: 1.2rem; text-align: center;
+    color: var(--text-faint); font-size: 0.85rem; letter-spacing: 0.1em;
+  }
+
+  /* 网格章节（应用 / 伦理）——无边框纯文字排版 */
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.6rem 3rem; }
+  .panel .pn {
+    font-size: 0.72rem; letter-spacing: 0.3em;
+    color: var(--accent); margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+  .panel h3 { font-size: 1.15rem; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 0.5rem; }
+  .panel p { font-family: var(--serif); font-size: 1.08rem; color: var(--text-dim); line-height: 1.7; }
+  .panel ul { list-style: none; margin-top: 0.55rem; }
+  .panel li {
+    font-family: var(--serif);
+    font-size: 1.05rem; color: var(--text-dim); margin-bottom: 0.35rem;
+  }
+  /* 页脚 */
+  footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 3rem clamp(1.5rem, 6vw, 3rem);
+    text-align: center;
+    font-family: var(--serif);
+    color: var(--text-faint); font-size: 0.82rem; letter-spacing: 0.03em;
+  }
+  footer .f-brand { font-size: 0.95rem; color: var(--text-dim); font-weight: 600; margin-bottom: 0.5rem; }
+
+  /* ============ 滚动浮现 ============ */
+  .reveal {
+    opacity: 0; transform: translateY(34px);
+    transition: opacity 0.9s var(--ease), transform 0.9s var(--spring);
+    will-change: opacity, transform;
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  .reveal.d1 { transition-delay: 0.08s; }
+  .reveal.d2 { transition-delay: 0.16s; }
+  .reveal.d3 { transition-delay: 0.24s; }
+  .reveal.d4 { transition-delay: 0.32s; }
+
+  /* ============ 减少动效 ============ */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+
+  /* ============ 响应式 ============ */
+  @media (max-width: 640px) {
+    :root { font-size: 16px; }
+    .nav-link { padding: 0.4rem 0.75rem; }
+    .hero-scroll { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+
+<!-- 悬浮导航 -->
+<nav class="nav" id="nav">
+  <a class="nav-brand" href="#top">
+    <span>AI Museum</span>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link active" href="#top">主页</a>
+    <a class="nav-link" href="time-machine.html">时光机</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero" id="top">
+  <div class="hero-kicker">The Age of Intelligent Machines</div>
+  <h1 class="hero-title">Artificial&nbsp;Intelligence.</h1>
+  <div class="hero-years">1956 <em>—</em> 2026</div>
+  <div class="hero-scroll">
+    <span>SCROLL</span>
+    <span class="line"></span>
+  </div>
+</header>
+
+<main>
+
+  <!-- 引言 -->
+  <section id="intro">
+    <div class="sec-head reveal">
+      <div class="sec-label">Prologue · 引言</div>
+      <h2 class="sec-title">什么是人工智能？</h2>
+    </div>
+    <div class="intro-body reveal d1">
+      <p>人工智能（<b>Artificial Intelligence</b>，缩写 AI）指让计算机完成那些以往需要<b>人类智慧</b>才能应付的任务——学习、推理、解决问题、感知与决策。它横跨工程学、数学与计算机科学，目标是研究并开发让机器能够感知环境、借助机器学习与智能采取行动的方法和软件。</p>
+      <p>作为一门学科，人工智能诞生于 <b>1956 年</b>的达特茅斯会议。此后七十年间，它多次经历乐观期，又陷入失望与资金流失的「AI 寒冬」。2012 年后，GPU 加速了神经网络训练，深度学习超越以往一切技术；<b>2017 年 Transformer 架构</b>的出现进一步加快了步伐。进入 2020 年代，生成式人工智能让创作与修改媒体内容成为可能，热潮与进步几乎同步到来。</p>
+      <p>人工智能主要由四类能力构成：<b>学习</b>——机器学习、深度学习与强化学习等子领域，让机器从数据中自行归纳规律；<b>推理与决策</b>——知识表示、逻辑推理与规划，让系统在不确定中做出理性选择；<b>感知</b>——计算机视觉与语音识别，让机器「看见」「听懂」真实世界；<b>语言与创造</b>——自然语言处理与生成式模型，让 AI 写作、绘画、对话，甚至创作。</p>
+    </div>
+  </section>
+
+  <!-- 研究课题 -->
+  <section id="research">
+    <div class="sec-head reveal">
+      <div class="sec-label">Research · 研究课题</div>
+      <h2 class="sec-title">AI 在解决哪些问题？</h2>
+      <p class="sec-sub">今天的人工智能研究已分化出多个子领域，研究者希望一个系统能具备某些特定能力。</p>
+    </div>
+    <div class="grid2">
+      <div class="panel reveal d1">
+        <div class="pn">01</div>
+        <h3>机器学习</h3>
+        <p>让机器从数据中获得知识、自动判断并输出结果。分为监督学习（分类、回归）与非监督学习，是 AI 从第一天起就重要的领域。</p>
+      </div>
+      <div class="panel reveal d2">
+        <div class="pn">02</div>
+        <h3>知识表示与推理</h3>
+        <p>让机器存储知识并推演出新知识——用逻辑符号定义命题与推理规则，机器自然就能「思考」。先验知识的正确性至关重要。</p>
+      </div>
+      <div class="panel reveal d3">
+        <div class="pn">03</div>
+        <h3>规划与决策</h3>
+        <p>Agent 需要建立可预测的世界模型，制定目标并选择最优行动；在结果不确定时，还要具备在不确定性中推理的能力。</p>
+      </div>
+      <div class="panel reveal d1">
+        <div class="pn">04</div>
+        <h3>自然语言处理</h3>
+        <p>研究如何理解与运用自然语言：让计算机「读懂」人类语言，并将数据转化为可读的文本与对话。</p>
+      </div>
+      <div class="panel reveal d2">
+        <div class="pn">05</div>
+        <h3>机器感知</h3>
+        <p>用相机、麦克风、声纳等传感器推断世界状态：计算机视觉、语音识别、人脸与物体识别，构成机器感知的基石。</p>
+      </div>
+      <div class="panel reveal d3">
+        <div class="pn">06</div>
+        <h3>运动与创造</h3>
+        <p>让机器人在物理世界中移动与操作；同时 AI 的创造力子领域正探索作曲、作诗、绘画与设计的新可能。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 应用与影响 -->
+  <section id="applications">
+    <div class="sec-head reveal">
+      <div class="sec-label">Impact · 应用与影响</div>
+      <h2 class="sec-title">AI 如何改变世界</h2>
+      <p class="sec-sub">从感知到认知、从创造到智慧——人工智能正深入办公、医疗、教育、交通等千行百业。</p>
+    </div>
+    <div class="grid2">
+      <div class="panel reveal d1">
+        <div class="pn">PERCEPTION · 感知</div>
+        <h3>看懂、听懂、说出</h3>
+        <ul>
+          <li>计算机视觉 · 图像与人脸识别</li>
+          <li>语音识别 · 文本转语音</li>
+          <li>自然语言处理 · 机器翻译</li>
+        </ul>
+      </div>
+      <div class="panel reveal d2">
+        <div class="pn">COGNITION · 认知</div>
+        <h3>分析、预测、判断</h3>
+        <ul>
+          <li>医学图像分析 · 癌症判断</li>
+          <li>产品推荐 · 信用风险评估</li>
+          <li>自动驾驶 · 预防性维护 · 灾害预测</li>
+        </ul>
+      </div>
+      <div class="panel reveal d3">
+        <div class="pn">CREATIVITY · 创造</div>
+        <h3>创作与生成</h3>
+        <ul>
+          <li>AI 作曲 · 作诗 · 小说创作</li>
+          <li>AI 绘画 · 图像与视频生成</li>
+          <li>AI 设计与产品创意</li>
+        </ul>
+      </div>
+      <div class="panel reveal d4">
+        <div class="pn">WISDOM · 智慧</div>
+        <h3>理解与价值</h3>
+        <p>涉及自我意识、自我认知与价值观——这是 AI 尚未触及、也最难模仿的部分。霍金、盖茨与马斯克都曾公开表达对 AI 未来的忧虑。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 伦理与未来 -->
+  <section id="future">
+    <div class="sec-head reveal">
+      <div class="sec-label">Ethics & Future · 伦理与未来</div>
+      <h2 class="sec-title">机遇与风险并存</h2>
+    </div>
+    <div class="grid2">
+      <div class="panel reveal d1">
+        <div class="pn">RISK · 风险</div>
+        <h3>经济冲击与担忧</h3>
+        <p>野村综合研究所与牛津大学调查指出：10–20 年后日本约 49% 的职业可能被 AI 替代。悲观学派（霍金、马斯克）警示机器失控与人类被超越的危机；乐观学派（杨立昆）则认为 AI 存在瓶颈，人类始终掌握着开关。</p>
+      </div>
+      <div class="panel reveal d2">
+        <div class="pn">GOVERNANCE · 治理</div>
+        <h3>全球监管加速</h3>
+        <p>2024 年 8 月，欧盟《人工智能法案》生效，建立首个覆盖全欧盟的全面监管框架；2023 年首届全球 AI 安全峰会在英国举行，28 国联合宣言呼吁国际合作。</p>
+      </div>
+      <div class="panel reveal d3">
+        <div class="pn">HORIZON · 地平线</div>
+        <h3>AGI 与超级智能</h3>
+        <p>通用人工智能（AGI）仍是领域的长期目标——一种在几乎所有认知任务上与人类做得一样好的 AI。有人相信十年内会出现超级智能，也有人认为机器永远无法真正「理解」世界。</p>
+      </div>
+      <div class="panel reveal d4">
+        <div class="pn">PHILOSOPHY · 哲学</div>
+        <h3>机器能思考吗？</h3>
+        <p>从图灵测试到「中文房间」论证，哲学家们争论：通过测试是否等于拥有思维？丹尼特认为人也不过是「一台有灵魂的机器」——这场争论，与 AI 本身一样古老，也一样年轻。</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="f-brand">Artificial Intelligence · 1956—2026</div>
+  <p>内容整理自《人工智能》条目（维基百科）与《人工智能史》。</p>
+  <p style="margin-top:0.4rem; opacity:0.7;">AI Museum · 去看看时光机</p>
+</footer>
+
+<script>
+(function () {
+  /* 导航滚动状态 */
+  var nav = document.getElementById('nav');
+  var onScroll = function () {
+    nav.classList.toggle('scrolled', window.scrollY > 24);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* 导航高亮 */
+  var sections = ['intro', 'research', 'applications', 'future'];
+  var links = document.querySelectorAll('.nav-link');
+  var topLink = links[0];
+
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        links.forEach(function (l) { l.classList.remove('active'); });
+        topLink.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  sections.forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) spy.observe(el);
+  });
+
+  /* 滚动浮现 */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+})();
+</script>
+
+</body>
+</html>
