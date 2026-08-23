@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>时光机 · 人工智能史 — AI Museum</title>
+<meta name="description" content="人工智能时光机：从远古神话与形式推理，到达特茅斯会议、两次 AI 寒冬，再到深度学习与大模型时代——七十年思想与代码之旅。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2305060a'/%3E%3Ctext x='50' y='54' text-anchor='middle' dominant-baseline='middle' font-family='Arial, sans-serif' font-size='42' font-weight='700' fill='%23f2f4f8'%3EAI%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #05060a;
+    --text: #f2f4f8;
+    --text-dim: #a0a6b5;
+    --text-faint: #6b7180;
+    --accent: #7aa2ff;
+    --accent-2: #a78bfa;
+    --accent-3: #f472b6;
+    --nav-h: 56px;
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+    --spring: cubic-bezier(0.34, 1.2, 0.4, 1);
+    --serif: "Songti SC", "SimSun", "STSong", "Noto Serif SC", "Source Han Serif SC", serif;
+    font-size: 17px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+                 "HarmonyOS Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection { background: rgba(122, 162, 255, 0.35); color: #fff; }
+  a { color: inherit; text-decoration: none; }
+
+  .bg-glow {
+    position: fixed; inset: 0; z-index: -2; pointer-events: none;
+    background:
+      radial-gradient(52rem 30rem at 85% -8%, rgba(122, 162, 255, 0.13), transparent 60%),
+      radial-gradient(46rem 28rem at 8% 18%, rgba(167, 139, 250, 0.10), transparent 60%),
+      radial-gradient(40rem 26rem at 55% 110%, rgba(244, 114, 182, 0.08), transparent 62%);
+  }
+
+  /* ============ 悬浮导航 ============ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: var(--nav-h);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 clamp(1.25rem, 5vw, 3.5rem);
+    background: rgba(5, 6, 10, 0.42);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    backdrop-filter: blur(22px) saturate(160%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    transition: background 0.4s var(--ease), border-color 0.4s var(--ease);
+  }
+  .nav.scrolled { background: rgba(5, 6, 10, 0.72); border-bottom-color: rgba(255, 255, 255, 0.12); }
+  .nav-brand { font-weight: 600; letter-spacing: -0.01em; font-size: 0.98rem; }
+  .nav-links { display: flex; align-items: center; gap: 0.35rem; }
+  .nav-link {
+    padding: 0.45rem 1rem; border-radius: 999px;
+    font-size: 0.92rem; color: var(--text-dim);
+    transition: color 0.25s var(--ease), background 0.25s var(--ease);
+  }
+  .nav-link:hover { color: var(--text); background: rgba(255, 255, 255, 0.07); }
+  .nav-link.active { color: #fff; background: rgba(255, 255, 255, 0.10); }
+
+  /* ============ Hero ============ */
+  .hero {
+    min-height: 78vh; min-height: 78svh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: calc(var(--nav-h) + 2rem) 1.5rem 4rem;
+  }
+  .hero-kicker {
+    font-size: 0.78rem; letter-spacing: 0.42em; text-indent: 0.42em;
+    color: var(--text-faint); text-transform: uppercase; margin-bottom: 1.6rem;
+    animation: fadeUp 1.1s var(--ease) 0.15s both;
+  }
+  .hero-title {
+    font-size: clamp(2.6rem, 9vw, 6.4rem);
+    font-weight: 700; letter-spacing: -0.045em; line-height: 1.02;
+    background: linear-gradient(115deg, #ffffff 30%, #bcd0ff 55%, #d3b8ff 80%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    animation: fadeUp 1.1s var(--ease) 0.3s both;
+    padding-bottom: 0.1em;
+  }
+  .hero-sub {
+    margin-top: 1.3rem; max-width: 30em;
+    font-family: var(--serif);
+    color: var(--text-dim); font-size: 1.05rem;
+    animation: fadeUp 1.1s var(--ease) 0.48s both;
+  }
+  .hero-scroll {
+    position: absolute; bottom: 2.2rem; left: 50%;
+    display: flex; flex-direction: column; align-items: center; gap: 0.55rem;
+    color: var(--text-faint); font-size: 0.72rem; letter-spacing: 0.28em; text-indent: 0.28em;
+    animation: fadeUpScroll 1.1s var(--ease) 0.9s both;
+  }
+  .hero-scroll .line {
+    width: 1px; height: 42px;
+    background: linear-gradient(to bottom, transparent, var(--text-faint), transparent);
+    animation: scrollPulse 2.4s var(--ease) infinite;
+    transform-origin: top center;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(26px); filter: blur(6px); }
+    to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+  @keyframes fadeUpScroll {
+    from { opacity: 0; transform: translate(-50%, 26px); filter: blur(6px); }
+    to   { opacity: 1; transform: translate(-50%, 0); filter: blur(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(0.6); opacity: 0.35; }
+    50% { transform: scaleY(1); opacity: 0.9; }
+  }
+
+  main { position: relative; z-index: 1; }
+
+  /* ============ 时代 ============ */
+  .era { max-width: 1000px; margin: 0 auto; padding: clamp(4rem, 8vw, 6.5rem) clamp(1.5rem, 6vw, 3rem) 0; }
+  .era:last-of-type { padding-bottom: clamp(4rem, 8vw, 6.5rem); }
+  .era-head { margin-bottom: 2.6rem; }
+  .era-label {
+    font-size: 0.76rem; letter-spacing: 0.4em; text-indent: 0.4em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 0.7rem;
+  }
+  .era-title {
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    font-weight: 700; letter-spacing: -0.028em; line-height: 1.14;
+  }
+  .era-sub {
+    margin-top: 0.9rem; max-width: 40em;
+    font-family: var(--serif);
+    color: var(--text-dim); font-size: 1.15rem; line-height: 1.6;
+  }
+
+  /* ============ 时间线 ============ */
+  .timeline {
+    --tl-pad: clamp(3.4rem, 9vw, 5.5rem);  /* 标题区左内边距 */
+    --tl-line: clamp(1.15rem, 3.4vw, 1.9rem); /* 竖线距 timeline 左缘 */
+    position: relative;
+    padding-left: var(--tl-pad);
+  }
+  .timeline::before {
+    content: ""; position: absolute;
+    left: var(--tl-line); top: 0.4rem; bottom: 0.4rem;
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, rgba(122,162,255,0.5) 6%, rgba(244,114,182,0.4) 94%, transparent);
+    border-radius: 2px;
+  }
+
+  .tl-item { position: relative; padding-bottom: clamp(1.8rem, 4vw, 2.6rem); }
+  .tl-item:last-child { padding-bottom: 0; }
+
+  /* 时间点（触发器）—— 相对 tl-item（content box）定位，需减去 timeline 的 padding */
+  .tl-point {
+    position: absolute; left: calc(var(--tl-line) - var(--tl-pad) - 13px);
+    top: 0.15rem; z-index: 3;
+    display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
+    cursor: pointer; background: none; border: none; color: inherit;
+    padding: 0; outline: none;
+  }
+  .tl-dot {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--bg);
+    border: 2.5px solid var(--accent);
+    box-shadow: 0 0 0 5px rgba(122, 162, 255, 0.10), 0 0 18px rgba(122, 162, 255, 0.45);
+    transition: transform 0.3s var(--spring), box-shadow 0.3s var(--ease), border-color 0.3s var(--ease);
+  }
+  .tl-item:nth-child(even) .tl-dot { border-color: var(--accent-3); box-shadow: 0 0 0 5px rgba(244,114,182,0.10), 0 0 18px rgba(244,114,182,0.4); }
+  .tl-point .year {
+    font-size: 0.66rem; font-weight: 600; letter-spacing: 0.08em;
+    color: var(--text-faint); white-space: nowrap;
+    transition: color 0.3s var(--ease);
+  }
+  .tl-item:hover .tl-dot, .tl-item:focus-within .tl-dot, .tl-item.open .tl-dot {
+    transform: scale(1.35);
+    border-color: #fff;
+    box-shadow: 0 0 0 6px rgba(122, 162, 255, 0.18), 0 0 26px rgba(122, 162, 255, 0.8);
+  }
+  .tl-item:nth-child(even):hover .tl-dot, .tl-item:nth-child(even):focus-within .tl-dot, .tl-item:nth-child(even).open .tl-dot {
+    box-shadow: 0 0 0 6px rgba(244,114,182,0.18), 0 0 26px rgba(244,114,182,0.75);
+  }
+  .tl-item:hover .year, .tl-item:focus-within .year, .tl-item.open .year { color: var(--text); }
+
+  /* 事件标题行 */
+  .tl-head {
+    display: flex; align-items: baseline; gap: 0.9rem;
+    padding-top: 0.32rem;
+  }
+  .tl-title {
+    font-size: 1.22rem; font-weight: 600; letter-spacing: -0.015em;
+    cursor: default;
+  }
+  .tl-tag {
+    font-size: 0.7rem; letter-spacing: 0.14em; color: var(--text-faint);
+    white-space: nowrap;
+  }
+
+  /* 浮现卡片 */
+  .tl-pop {
+    position: absolute; z-index: 20;
+    left: 0; right: 0; top: 100%;
+    margin-top: 0.9rem;
+    padding: 1.3rem 1.4rem;
+    border-radius: 18px;
+    background: rgba(10, 13, 22, 0.95);
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0) 60%);
+    -webkit-backdrop-filter: blur(36px) saturate(180%);
+    backdrop-filter: blur(36px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    opacity: 0; visibility: hidden;
+    transform: translateY(-8px) scale(0.98);
+    transform-origin: top left;
+    transition: opacity 0.35s var(--ease), transform 0.4s var(--spring), visibility 0s linear 0.35s;
+    pointer-events: none;
+  }
+  .tl-pop::before {
+    content: ""; position: absolute;
+    top: -7px; left: calc(var(--tl-line) - var(--tl-pad) - 7px);
+    width: 14px; height: 14px;
+    background: rgba(10, 13, 22, 0.98);
+    border-left: 1px solid rgba(255, 255, 255, 0.22);
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+    transform: rotate(45deg);
+  }
+  .tl-pop .pop-year {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 0.4rem;
+  }
+  .tl-item:nth-child(even) .tl-pop .pop-year { color: var(--accent-3); }
+  .tl-pop h4 { font-size: 1.06rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 0.5rem; }
+  .tl-pop p {
+    font-family: var(--serif);
+    font-size: 0.98rem; color: #c3c9d6; line-height: 1.75;
+  }
+  .tl-pop p + p { margin-top: 0.55rem; }
+  .tl-item:hover .tl-pop, .tl-item:focus-within .tl-pop, .tl-item.open .tl-pop {
+    opacity: 1; visibility: visible;
+    transform: translateY(0) scale(1);
+    transition: opacity 0.35s var(--ease), transform 0.45s var(--spring), visibility 0s;
+    pointer-events: auto;
+  }
+  /* 焦点淡化：打开某项卡片时，同一 timeline 内的后续兄弟项降透明度 */
+  .tl-item.open ~ .tl-item { opacity: 0.18; }
+  .tl-item.open ~ .tl-item .tl-dot { box-shadow: 0 0 0 4px rgba(122, 162, 255, 0.06); }
+  /* 同时淡化不在 timeline 内的内容（如引文、后续 era），避免透出 */
+  main:has(.tl-item.open) .era-quote { opacity: 0.15; transition: opacity 0.3s var(--ease); }
+  /* 鼠标悬停（桌面端）效果同上 */
+  .tl-item:hover ~ .tl-item { opacity: 0.18; }
+
+  /* 时代总结引文 */
+  .era-quote {
+    max-width: 1000px; margin: 0 auto;
+    padding: clamp(3rem, 7vw, 5rem) clamp(1.5rem, 6vw, 3rem);
+  }
+  .era-quote p {
+    font-family: var(--serif);
+    font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+    font-weight: 500; letter-spacing: -0.015em; line-height: 1.55;
+    color: #e8ecf5; text-align: center;
+  }
+  .era-quote p span {
+    background: linear-gradient(90deg, var(--accent), var(--accent-3));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+  }
+  .era-quote .who {
+    margin-top: 0.9rem; text-align: center;
+    color: var(--text-faint); font-size: 0.82rem; letter-spacing: 0.1em;
+  }
+
+  /* ============ 页脚 ============ */
+  footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 3rem clamp(1.5rem, 6vw, 3rem);
+    text-align: center;
+    font-family: var(--serif);
+    color: var(--text-faint); font-size: 0.82rem; letter-spacing: 0.03em;
+  }
+  footer .f-brand { font-size: 0.95rem; color: var(--text-dim); font-weight: 600; margin-bottom: 0.5rem; }
+
+  /* ============ 滚动浮现 ============ */
+  .reveal {
+    opacity: 0; transform: translateY(34px);
+    transition: opacity 0.9s var(--ease), transform 0.9s var(--spring);
+    will-change: opacity, transform;
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  .reveal.d1 { transition-delay: 0.08s; }
+  .reveal.d2 { transition-delay: 0.16s; }
+  .reveal.d3 { transition-delay: 0.24s; }
+
+  /* ============ 减少动效 ============ */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+
+  /* ============ 响应式 ============ */
+  @media (max-width: 640px) {
+    :root { font-size: 16px; }
+    .nav-link { padding: 0.4rem 0.75rem; }
+    .hero-scroll { display: none; }
+    .timeline { --tl-pad: 3rem; --tl-line: 1rem; }
+    .tl-head { flex-direction: column; gap: 0.1rem; padding-top: 0.1rem; }
+  }
+  @media (hover: none) {
+    .tl-pop { position: static; margin-top: 0.8rem; transform: none; }
+    .tl-pop { opacity: 0; visibility: hidden; max-height: 0; padding-top: 0; padding-bottom: 0; border-width: 0; overflow: hidden; transition: opacity 0.3s var(--ease), max-height 0.4s var(--ease), padding 0.3s var(--ease); }
+    .tl-pop::before { display: none; }
+    .tl-item.open .tl-pop { opacity: 1; visibility: visible; max-height: 40rem; padding-top: 1.25rem; padding-bottom: 1.25rem; border-width: 1px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow" aria-hidden="true"></div>
+
+<nav class="nav" id="nav">
+  <a class="nav-brand" href="index.html">AI Museum</a>
+  <div class="nav-links">
+    <a class="nav-link" href="index.html">主页</a>
+    <a class="nav-link active" href="time-machine.html">时光机</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-kicker">Time Machine · 时光机</div>
+  <h1 class="hero-title">From Myth to Machine.</h1>
+  <p class="hero-sub">从神话与齿轮中的幻想，到图灵机的纸带，再到与大模型对话的今天——把鼠标悬停在时间点上，阅读每一个值得记住的瞬间。</p>
+  <div class="hero-scroll">
+    <span>SCROLL</span>
+    <span class="line"></span>
+  </div>
+</header>
+
+<main>
+
+  <!-- ========== 时代一：思想先驱 ========== -->
+  <section class="era" id="era1">
+    <div class="era-head reveal">
+      <div class="era-label">Chapter 01 · 公元前 — 1943</div>
+      <h2 class="era-title">思想先驱：从神话到图灵机</h2>
+      <p class="era-sub">早在计算机诞生之前，「人造智能」的幻想与形式推理的探索已延续了数千年——这是人工智能的前史。</p>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">远古</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">神话中的自动人偶</span>
+          <span class="tl-tag">幻想</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">Antiquity · 远古</div>
+          <h4>会思考的雕像与机械人</h4>
+          <p>希腊神话中，赫淮斯托斯锻造黄金机器人，皮格马利翁的伽拉忒亚被赋予生命；古埃及与古希腊的工匠为神像注入「思想」，信徒相信它们拥有智慧与激情。中世纪则流传着用巫术与炼金术为无生命物质赋予意识的传说——贾比尔的 Takwin、帕拉塞尔苏斯的何蒙库鲁兹、犹太传说中以泥土造人的魔像。</p>
+          <p>玛丽·雪莱的《弗兰肯斯坦》与恰佩克的《罗素姆的万能机器人》将这一幻想带入近代文学，「人造人」自此成为科幻的永恒母题。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1206</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">加扎利的可编程自动人偶</span>
+          <span class="tl-tag">自动机</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1206 · 阿勒颇</div>
+          <h4>第一台「可编程」机器</h4>
+          <p>阿拉伯工程师伊斯梅尔·加扎利在《精巧机械装置知识之书》中记录了可编程的自动人偶——通过凸轮与销钉控制动作顺序，这是已知最早带有「可编程逻辑」色彩的机械装置。同时代的中国西周有偃师的传说，古希腊有希罗的自动装置，它们共同构成机器智能的机械源头。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1641</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">「推理就是计算」</span>
+          <span class="tl-tag">哲学</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">17 世纪 · 欧洲</div>
+          <h4>霍布斯与莱布尼茨的形式推理</h4>
+          <p>托马斯·霍布斯在《利维坦》中写下名言「推理就是计算」；莱布尼茨则设想了「通用表意文字」——一种能将推理规约为计算的普适语言，使哲学家像会计师一样只需「开始算吧」。拉蒙·柳利的逻辑轮盘、亚里士多德的三段论、欧几里得的《几何原本》、花剌子密的代数学，早已为形式推理铺平道路。</p>
+          <p>人工智能的基本假设——人类的思考过程可以机械化——正是在此确立。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1913</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">数学的形式化之梦</span>
+          <span class="tl-tag">数理逻辑</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1847 — 1913</div>
+          <h4>布尔、弗雷格与《数学原理》</h4>
+          <p>布尔在《思维的定律》中把逻辑化为代数；弗雷格在《概念文字》中发明一阶逻辑；罗素与怀特海用三卷《数学原理》为全部数学给出形式化基础，激励希尔伯特追问：能否将一切数学推理形式化？</p>
+          <p>哥德尔不完备定理、图灵机与丘奇的 λ 演算给出了惊人回答：数理逻辑存在局限，但任何形式的数学推理都能在机械限制下被模拟——机器思考在理论上成为可能。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1936</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">图灵机与邱奇-图灵论题</span>
+          <span class="tl-tag">理论奠基</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1936 · 剑桥</div>
+          <h4>一台只处理 0 和 1 的机器，能模拟一切计算</h4>
+          <p>艾伦·图灵提出「图灵机」：一个看似简单的理论构造，却抓住了抽象符号处理的本质——只操作「0」和「1」的简单机器，能够模拟任意复杂的数学推理。邱奇-图灵论题将其推向极致，这一灵感让科学家们开始认真探讨「电子大脑」的可能性。</p>
+          <p>与此同时，巴贝奇设计的分析机虽未建成，爱达·勒芙蕾丝却预言它将「创作出无限复杂、无限宽广的精妙科学乐章」。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1943</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">麦卡洛克-皮茨人工神经元</span>
+          <span class="tl-tag">神经科学</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1943 · 芝加哥</div>
+          <h4>神经网络的思想种子</h4>
+          <p>沃伦·麦卡洛克与沃尔特·皮茨分析了理想化的人工神经元网络，指出它们可以进行简单逻辑运算——这是最早描述「神经网络」的论文。神经学、维纳的控制论、香农的信息论与图灵的计算理论在这一时期交汇，共同暗示了构建电子大脑的可能性。</p>
+          <p>年轻的马文·明斯基正是他们的学生。1951 年，他与迪恩·埃德蒙兹造出第一台神经网络机 SNARC；同年，斯特雷奇写出了西洋跳棋程序，游戏 AI 由此登上历史舞台。</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="era-quote reveal">
+    <p>「我们只能看到眼前的一小段距离……<br>但是，我们可以看到仍有许多工作要做。」<br><span>—— 艾伦·图灵，1950</span></p>
+    <div class="who">《计算机器与智能》</div>
+  </div>
+
+  <!-- ========== 时代二：诞生 ========== -->
+  <section class="era" id="era2">
+    <div class="era-head reveal">
+      <div class="era-label">Chapter 02 · 1943 — 1956</div>
+      <h2 class="era-title">人工智能的诞生</h2>
+      <p class="era-sub">从图灵测试到达特茅斯会议——「人工智能」这个名字，以及这门学科，正式确立。</p>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1950</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">图灵测试</span>
+          <span class="tl-tag">判据</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1950 · 曼彻斯特</div>
+          <h4>机器能否思考？</h4>
+          <p>图灵在划时代论文《计算机器与智能》中预言了创造真正智能机器的可能性。由于「智能」难以定义，他提出图灵测试：如果一台机器通过电传设备与人类对话而无法被辨别出机器身份，就应认为它具备智能。这一简化令人信服地说明「思考的机器」是可能的，也是人工智能哲学的第一个严肃提案。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1955</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">逻辑理论家程序</span>
+          <span class="tl-tag">符号推理</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1955 · 卡内基梅隆</div>
+          <h4>第一个「思考」程序</h4>
+          <p>艾伦·纽厄尔与后来的诺贝尔奖得主赫伯特·西蒙，在 J. C. 肖的协助下开发了「逻辑理论家」——它能证明《数学原理》中前 52 个定理里的 38 个，其中一些证明比原著更新颖精巧。西蒙宣称他们「解决了神秘的心身问题」：物质构成的系统如何获得心灵的性质。这一立场后来被约翰·希尔勒称为「强人工智能」。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1956</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">达特茅斯会议：AI 诞生</span>
+          <span class="tl-tag">学科确立</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1956 夏 · 达特茅斯学院</div>
+          <h4>「人工智能」一词诞生</h4>
+          <p>马文·明斯基、约翰·麦卡锡与克劳德·香农、内森·罗彻斯特组织了达特茅斯会议。会议宣言提出：「学习或者智能的任何其他特性的每一个方面都应能被精确地加以描述，使得机器可以对其模拟。」</p>
+          <p>会上，麦卡锡说服与会者接受「人工智能」作为领域名称；纽厄尔与西蒙讨论了「逻辑理论家」。参会的索罗门诺夫、塞尔弗里奇、塞缪尔等人都在此后十年做出重要贡献——这次会议被广泛承认为 AI 诞生的标志。</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== 时代三：黄金年代 ========== -->
+  <section class="era" id="era3">
+    <div class="era-head reveal">
+      <div class="era-label">Chapter 03 · 1956 — 1974</div>
+      <h2 class="era-title">黄金年代：第一波浪潮</h2>
+      <p class="era-sub">计算机能解代数题、证明几何定理、甚至用英语对话——研究者们相信完全智能的机器将在二十年内出现。</p>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1958</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">感知器与纳谏者</span>
+          <span class="tl-tag">学习 · 逻辑</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1958 · 康奈尔 / 斯坦福</div>
+          <h4>机器「学习」与逻辑编程的起点</h4>
+          <p>弗兰克·罗森布拉特提出感知器——一种神经网络的早期形式，他乐观地预言感知器「最终将能够学习、作出决策和翻译语言」。同年，约翰·麦卡锡提出「纳谏者」程序构想，将逻辑学引入 AI；1963 年罗宾逊发现归结与合一算法，为计算机推理提供了简单方法。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1961</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">搜索、通用解题器与微世界</span>
+          <span class="tl-tag">算法</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1960s · 四大实验室</div>
+          <h4>搜索式推理统治的十年</h4>
+          <p>大多数 AI 程序使用同一种基本算法：一步步前进，像在迷宫中找出路，遇死胡同则回溯——「搜索式推理」。纽厄尔与西蒙用「通用解题器」将其推广到一般情形；吉宁特的几何定理证明机、斯拉格尔的 SAINT 相继问世。</p>
+          <p>斯坦福的 STRIPS 为机器人 Shakey 规划动作；MIT 的明斯基与派普特倡导「微世界」研究，特里·温诺格拉德的 SHRDLU 能在积木世界中用英语对话并执行操作，成为微世界研究的最高成就。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1966</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">ELIZA：第一个聊天机器人</span>
+          <span class="tl-tag">自然语言</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1966 · MIT</div>
+          <h4>人们以为自己在和人交谈</h4>
+          <p>约瑟夫·魏泽鲍姆的 ELIZA 模拟心理医生，用固定套路与语法复述与用户对话。许多使用者误以为自己在和人类交谈——尽管 ELIZA 根本不知道自己「说」了什么。语义网（奎利恩）、概念关联（尚克）等知识表示方法也在同期出现。</p>
+          <p>魏泽鲍姆后来因同事开发医疗聊天程序 DOCTOR 而开始思考 AI 伦理，1976 年出版《计算机的力量与人类的推理》，警示 AI 滥用可能损害人类生命价值。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1963</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">经费涌入与乐观预言</span>
+          <span class="tl-tag">资助</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1963 — 1970</div>
+          <h4>「十年之内，机器将能完成人能做到的一切」</h4>
+          <p>1963 年 MIT 从 ARPA 获得二百二十万美元资助 MAC 工程，此后每年三百万美元，直到七十年代。ARPA 主任利克莱德信奉「资助人而不是项目」，放任自由探索，孕育了 MIT 的 hacker 文化。</p>
+          <p>乐观随之失控：纽厄尔与西蒙预言「十年之内数字计算机将成为国际象棋世界冠军」；西蒙声称「二十年内，机器将能完成人能做到的一切工作」；明斯基断言「一代之内，创造人工智能的问题将获得实质解决」。</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="era-quote reveal">
+    <p>「二十年内，机器将能完成人能做到的一切工作。」<br><span>—— 赫伯特·西蒙，1965</span></p>
+    <div class="who">一次后来被反复引用的过度自信</div>
+  </div>
+
+  <!-- ========== 时代四：第一次寒冬 ========== -->
+  <section class="era" id="era4">
+    <div class="era-head reveal">
+      <div class="era-label">Chapter 04 · 1974 — 1980</div>
+      <h2 class="era-title">第一次 AI 寒冬</h2>
+      <p class="era-sub">承诺无法兑现，资助被切断。最杰出的程序也只是「玩具」——AI 遭遇了无法克服的基础性障碍。</p>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1969</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">《感知器》与联结主义受挫</span>
+          <span class="tl-tag">转折</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1969 · MIT</div>
+          <h4>一本摧毁神经网络十年研究的书</h4>
+          <p>明斯基与西摩·派普特出版《感知器》，暗示感知器具有严重局限、罗森布拉特的预言过于夸张。这本书的影响是破坏性的：联结主义研究因此停滞了十年。罗森布拉特本人未能等到领域复兴，在《感知器》问世后不久因游船事故去世。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1973</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">莱特希尔报告与拨款停止</span>
+          <span class="tl-tag">寒冬</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1973 — 1974</div>
+          <h4>「宏伟目标」的完全失败</h4>
+          <p>詹姆斯·莱特希尔爵士的报告批评 AI 在实现「宏伟目标」上完全失败，特别指出指数爆炸问题，导致英国 AI 研究陷入低谷；1974 年后已很难再找到对 AI 项目的资助。DARPA 因曼斯菲尔德修正案被迫只资助有明确任务方向的研究，60 年代的自由探索一去不复返。</p>
+          <p>深层问题包括：计算能力不足（莫拉维克指出计算机离智能要求还差上百万倍）、常识与推理难以建模、莫拉维克悖论——证明定理容易，人脸识别却极难。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1970s</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">逻辑、Prolog 与框架</span>
+          <span class="tl-tag">探索</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1970s · 爱丁堡</div>
+          <h4>寒冬中的两条路线</h4>
+          <p>罗伯特·科瓦尔斯基与法国学者科尔默劳尔合作开发逻辑编程语言 Prolog，为专家系统与纽厄尔、西蒙的 Soar 奠定基础。明斯基 1975 年提出「框架」理论——用一套常识假设结构理解「鸟会飞」这类概念；尚克称之为「脚本」，让程序能回答短文提问。多年后，面向对象编程继承了框架中的「继承」概念。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1980</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">「中文房间」论证</span>
+          <span class="tl-tag">哲学</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1980 · 伯克利</div>
+          <h4>程序真的「理解」吗？</h4>
+          <p>约翰·希尔勒提出「中文房间」思想实验：一个人按规则书处理中文符号，却不懂中文——程序同理，只是转换数据，并不真正理解符号的意义。这一「意向性」问题至今仍是强人工智能争论的核心；丹尼特则反驳：人也不过是「一台有灵魂的机器」。</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== 时代五：繁荣 ========== -->
+  <section class="era" id="era5">
+    <div class="era-head reveal">
+      <div class="era-label">Chapter 05 · 1980 — 1987</div>
+      <h2 class="era-title">繁荣：专家系统的时代</h2>
+      <p class="era-sub">AI 第一次真正「实用」起来——专家系统为公司省钱，知识工程成为主流，「第五代计算机」点燃全球竞赛。</p>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1965</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">DENDRAL 与 MYCIN</span>
+          <span class="tl-tag">专家系统</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1965 — 1972 · 斯坦福</div>
+          <h4>第一种成功的 AI 软件</h4>
+          <p>爱德华·费根鲍姆团队从 1965 年起开发 DENDRAL，依据分光计读数分辨化学混合物；1972 年的 MYCIN 能诊断血液传染病并推荐用药。专家系统只限于很小的知识领域，避免了常识难题，又容易实现与修改——实践证明了这类程序的实用价值。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1980</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">XCON 与知识革命</span>
+          <span class="tl-tag">商业成功</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1980 · CMU / DEC</div>
+          <h4>每年为公司省下四千万美元</h4>
+          <p>1980 年卡内基梅隆大学为 DEC 设计了专家系统 XCON——巨大成功，1986 年之前每年为公司省下四千万美元。全世界的公司开始研发应用专家系统，到 1985 年 AI 投入已超十亿美元。</p>
+          <p>「知识革命」成为 80 年代 AI 研究的主要方向；道格拉斯·莱纳特的 Cyc 试图建立一个容纳普通人全部常识的巨型数据库，但数十年仍未完成。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1981</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">日本第五代计算机计划</span>
+          <span class="tl-tag">竞赛</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1981 · 通产省</div>
+          <h4>八亿五千万美元的目标：会对话、会推理的机器</h4>
+          <p>日本经济产业省拨款八亿五千万美元支持第五代计算机项目，目标造出能与人对话、翻译语言、解释图像并像人一样推理的机器，选用 Prolog 为主要语言。其他国家纷纷响应：英国启动耗资三亿五千万英镑的 Alvey 工程，美国成立 MCC 与战略计算促进会，DARPA 对 AI 的投资在 1988 年达到 1984 年的三倍。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1982</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">联结主义重生</span>
+          <span class="tl-tag">神经网络</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1982 — 1986</div>
+          <h4>Hopfield 网络与反向传播</h4>
+          <p>物理学家约翰·霍普菲尔德证明一种新型神经网络（Hopfield 网络）能以全新方式学习和处理信息；戴维·鲁梅尔哈特推广了反向传播算法。1986 年两卷本《分布式并行处理》问世，统一并促进了这一新领域。90 年代，神经网络在光字符识别与语音识别软件中获得商业成功。</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== 时代六：第二次寒冬 ========== -->
+  <section class="era" id="era6">
+    <div class="era-head reveal">
+      <div class="era-label">Chapter 06 · 1987 — 1993</div>
+      <h2 class="era-title">第二次 AI 低谷</h2>
+      <p class="era-sub">「AI 之冬」一词被不幸言中：Lisp 机市场一夜崩塌，专家系统维护昂贵，第五代工程未能兑现。</p>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1987</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">Lisp 机市场崩溃</span>
+          <span class="tl-tag">寒冬</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1987 · 硅谷</div>
+          <h4>价值五亿美元的产业一夜土崩瓦解</h4>
+          <p>1987 年 AI 硬件市场需求突然下跌：Apple 与 IBM 的台式机性能已超过昂贵的 Lisp 机，老产品失去存在理由。XCON 等最初大获成功的专家系统维护费用居高不下、难以升级、脆弱易错——其实用性仅局限于特定情景。战略计算促进会大幅削减资助，到 1991 年第五代工程仍未实现目标。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1990</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">「大象不玩象棋」与具身智能</span>
+          <span class="tl-tag">新范式</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1986 — 1990 · MIT</div>
+          <h4>智能需要躯体</h4>
+          <p>机器人研究者罗德尼·布鲁克斯在《大象不玩象棋》中批评「物理符号系统假设」：「这个世界就是描述它自己最好的模型。」他主张「自底向上」创造智能——机器需要感知、移动、生存、与世界交互，这一主张复兴了沉寂已久的控制论。认知科学家称之为「具身的心智」论题。</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== 时代七：大数据与机器学习 ========== -->
+  <section class="era" id="era7">
+    <div class="era-head reveal">
+      <div class="era-label">Chapter 07 · 1993 — 2019</div>
+      <h2 class="era-title">第三波浪潮：大数据与机器学习</h2>
+      <p class="era-sub">年过半百的 AI 终于实现最初的一些目标——深蓝、沃森、AlphaGo，一个比一个震惊世界。</p>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1997</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">深蓝击败卡斯帕罗夫</span>
+          <span class="tl-tag">里程碑</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1997 年 5 月 11 日</div>
+          <h4>第一次战胜人类世界冠军</h4>
+          <p>IBM 的深蓝成为战胜国际象棋世界冠军卡斯帕罗夫的第一个计算机系统。深蓝比 1951 年斯特雷奇下棋用的 Ferranti Mark 1 快约一千万倍——不是范式的革命，而是工程技术与摩尔定律的胜利。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">1990s</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">智能代理与概率革命</span>
+          <span class="tl-tag">范式</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">1988 — 1990s</div>
+          <h4>AI 成为一门更严格的科学</h4>
+          <p>朱迪亚·珀尔 1988 年出版《智能系统中的概率推理》，将概率论与决策理论引入 AI，贝叶斯网络、隐马尔可夫模型、信息论成为新工具。「智能代理」范式被广泛接受：AI 被定义为「对智能代理的研究」。共享的数学语言让 AI 与统计学、经济学、运筹学展开深层合作——罗素与诺维格称之为「简约派的胜利」。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">2005</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">沃森与深度学习前夜</span>
+          <span class="tl-tag">应用</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">2005 — 2011</div>
+          <h4>从 DARPA 挑战赛到《危险边缘》</h4>
+          <p>2005 年斯坦福机器人沿沙漠小径自动行驶 131 英里，赢得 DARPA 挑战赛头奖；2009 年蓝脑计划声称模拟了部分鼠脑；2011 年 IBM 沃森参加《危险边缘》节目并在最后一集击败人类选手。2006 年，辛顿提出深度置信网络——深度学习的现代范式自此拉开序幕。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">2012</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">AlexNet 引爆深度学习</span>
+          <span class="tl-tag">革命</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">2012 · ImageNet</div>
+          <h4>GPU 加速的深度神经网络接管行业</h4>
+          <p>AlexNet 在 ImageNet 竞赛中以巨大优势夺冠，图形处理器开始加速神经网络训练，深度学习超越以往一切技术。此后深度学习主导行业标准：卷积神经网络改写图像识别，LSTM 与 GRU 解决梯度消失问题，神经网络在计算机视觉与语音识别等领域达到甚至超过人类平均准确率。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">2016</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">AlphaGo 战胜李世石</span>
+          <span class="tl-tag">里程碑</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">2016 年 3 月 · 首尔</div>
+          <h4>只被输入规则，便自主形成策略</h4>
+          <p>DeepMind 的 AlphaGo 成为第一个不让子而击败职业围棋棋士的电脑围棋程序，战胜韩国棋王李世乭。2017 年 5 月，AlphaGo 在中国乌镇围棋峰会上三局击败当时世界排名第一的柯洁。同年，Transformer 架构在《Attention Is All You Need》中提出——大模型时代的技术地基就此铺就。</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="era-quote reveal">
+    <p>「它只被输入了游戏规则，<br>就自主形成了策略。」<br><span>—— AlphaGo，2016</span></p>
+    <div class="who">Google DeepMind</div>
+  </div>
+
+  <!-- ========== 时代八：大模型时代 ========== -->
+  <section class="era" id="era8">
+    <div class="era-head reveal">
+      <div class="era-label">Chapter 08 · 2020 — 至今</div>
+      <h2 class="era-title">第四波浪潮：大模型时代</h2>
+      <p class="era-sub">从 GPT-3 的「涌现」，到 ChatGPT 的全民化，再到 DeepSeek 与智能体——生成式 AI 在数年间改变了一切，AI 从「会聊天」走向「能办事」。</p>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">2020</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">GPT-3 少样本学习</span>
+          <span class="tl-tag">大模型</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">2020 · OpenAI</div>
+          <h4>仅凭少量示例即可完成复杂任务</h4>
+          <p>OpenAI 发布 GPT-3，展示了少样本学习能力：仅给几个示例，模型就能写文章、翻译、编程。大模型的「涌现」能力初现端倪——1750 亿参数的规模让此前不可能的任务成为可能。人类对 AI 的关注与投资再度暴涨，AI Impacts 预测仅美国一地年投资即达约 500 亿美元，约 20% 的新晋计算机科学博士专攻 AI。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">2021</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">DALL-E 与生成式视觉</span>
+          <span class="tl-tag">多模态</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">2021 · OpenAI</div>
+          <h4>AI 开始「看见」并「创造」图像</h4>
+          <p>OpenAI 推出 DALL-E，能够仅凭一句文字提示生成图像；同年发布 CLIP 模型，打通文本与图像的语义桥梁。生成式人工智能从纯文本走向多模态——按文字提示生成图像、音频与视频成为 2020 年代最显著的 AI 应用形态。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">2022</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">ChatGPT 引爆生成式 AI</span>
+          <span class="tl-tag">爆发</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">2022 年 11 月 · OpenAI</div>
+          <h4>AI 的「iPhone 时刻」</h4>
+          <p>ChatGPT 基于 GPT-3.5 架构，通过基于人类反馈的强化学习（RLHF）训练，以自然对话方式交互，能完成自动文本生成、问答、摘要等复杂任务。上线两个月用户破亿，成为史上增长最快的消费应用，生成式人工智能由此走入千家万户。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">2023</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">GPT-4 与文心一言</span>
+          <span class="tl-tag">多模态 · 中国</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">2023 · 中美竞速</div>
+          <h4>多模态与国产大模型登场</h4>
+          <p>2023 年 3 月 GPT-4 正式推出，多模态输入与复杂问题解决能力显著提升；同年 8 月，百度向公众开放文心一言，中国内地民众第一次用上本土大语言模型。大模型从「少数人的实验」变成「全民可用的服务」，全球主要科技公司全面投入。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">2023</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">全球 AI 安全峰会</span>
+          <span class="tl-tag">治理</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">2023 年 11 月 · 布莱切利园</div>
+          <h4>国际治理的开端</h4>
+          <p>首届全球人工智能安全峰会在英国布莱切利园举行，讨论 AI 的近期与远期风险以及强制性与自愿性监管框架。包括美国、中国和欧盟在内的 28 国发表联合宣言，呼吁国际合作应对 AI 带来的挑战——AI 治理从国家层面走向全球协作。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">2024</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">GPT-4o、DeepSeek-V3 与欧盟 AI 法案</span>
+          <span class="tl-tag">格局</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">2023 — 2024</div>
+          <h4>多模态、开源与监管元年</h4>
+          <p>2024 年 OpenAI 发布多模态 GPT-4o，以更自然的对话能力获得广泛应用；Anthropic 的 Claude 因安全性与可解释性受企业青睐，xAI 的 Grok 加速太空与物理研究。2024 年 12 月 DeepSeek-V3 以低成本实现高性能，引发全球开源潮。2024 年 8 月，欧盟《人工智能法案》生效，建立首个覆盖全欧盟的全面监管框架；全球 AI 市场已达约 1640 亿美元，以年复合增长率 36.6% 持续增长。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">2025</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">DeepSeek-R1 与推理模型竞赛</span>
+          <span class="tl-tag">推理 · 开源</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">2025 上半年</div>
+          <h4>671B 参数的开源推理模型</h4>
+          <p>2025 年 1 月，深度求索发布 DeepSeek-R1（671B 参数），专注复杂逻辑任务，推理能力对标 OpenAI 的 o1，并以新算法大幅降低训练成本、开源权重与训练方法，引发全球 AI 竞争热潮。3 月，阿里巴巴发布 QwQ-32B 开源推理模型，性能对标 DeepSeek-R1 且计算需求显著降低，令阿里港股当日上涨超 8%。中小型高效模型开始崛起。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">2025</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">GPT-5、Gemini 3 与机器人元年</span>
+          <span class="tl-tag">竞争 · 落地</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">2025 下半年</div>
+          <h4>模型密集发布，AI 走进物理世界</h4>
+          <p>2025 年 7 月 xAI 发布 Grok 4；8 月 OpenAI 向所有用户开放 GPT-5；9 月深度求索开源 DeepSeek-V3.2-Exp 并公开稀疏注意力机制；11 月 GPT-5.1、Gemini 3 与 Claude Opus 4.5 密集发布，Gemini 3 强调「智能体」能力。2025 年被称为「人工智能机器人年」：中国投资约千亿美元于智能制造与医疗 AI，并自 9 月起要求对 AI 生成内容进行标记。</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <button class="tl-point" tabindex="0" aria-haspopup="true">
+          <span class="tl-dot"></span>
+          <span class="year">2026</span>
+        </button>
+        <div class="tl-head">
+          <span class="tl-title">智能体时代</span>
+          <span class="tl-tag">现在</span>
+        </div>
+        <div class="tl-pop">
+          <div class="pop-year">2026 · 此刻</div>
+          <h4>AI 从「会聊天」走向「能办事」</h4>
+          <p>2026 年，「智能体」成为行业主流方向：2 月 Claude Opus 4.6；3 月 GPT-5.4 面向企业专业任务、Gemini 3.1 Pro 推理能力大幅提升；5 月 Google 在 I/O 大会宣布 Gemini 进入「智能体时代」并推出 Gemini Spark，OpenAI 同月发布 GPT-5.5；8 月深度求索发布 DeepSeek-V4-Pro 强化智能体能力。联合国独立国际人工智能科学小组亦于 3 月召开首次会议——开放权重模型升温，全球协同治理提速，人类与机器的关系正被彻底改写。</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="f-brand">AI Museum · 时光机</div>
+  <p>内容整理自《人工智能史》与《人工智能》条目（维基百科），覆盖从远古幻想到 2026 智能体时代。</p>
+  <p style="margin-top:0.4rem; opacity:0.7;">将鼠标悬停在时间点上，阅读每个瞬间</p>
+</footer>
+
+<script>
+(function () {
+  /* 导航滚动状态 */
+  var nav = document.getElementById('nav');
+  var onScroll = function () { nav.classList.toggle('scrolled', window.scrollY > 24); };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* 滚动浮现 */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+  /* 触屏设备：点击时间点展开卡片 */
+  var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  if (!finePointer.matches) {
+    var points = document.querySelectorAll('.tl-point');
+    points.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var item = btn.parentElement;
+        var wasOpen = item.classList.contains('open');
+        document.querySelectorAll('.tl-item.open').forEach(function (o) { o.classList.remove('open'); });
+        if (!wasOpen) item.classList.add('open');
+      });
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
